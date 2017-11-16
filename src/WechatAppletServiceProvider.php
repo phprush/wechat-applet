@@ -20,7 +20,7 @@ class WechatAppletServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $config_file = dirname(dirname(__DIR__)) . '/config/config.php';
+        $config_file = dirname(__DIR__) . '/config/config.php';
         $this->mergeConfigFrom($config_file, 'wechat/applet');
         $this->publishes([
             $config_file => config_path('wechat/applet.php')
