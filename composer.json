@@ -1,0 +1,22 @@
+{
+  "name": "phprush/wechat-applet",
+  "description": "wechat applet lib",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "JianYong",
+      "email": "jianyong.me@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "PhpRush\\Wechat\\Applet\\": ["src/"]
+    }
+  },
+  "minimum-stability": "stable",
+  "require": {
+        "php": ">=5.3.3",
+        "rmccue/requests": "^1.7"
+  }
+}
