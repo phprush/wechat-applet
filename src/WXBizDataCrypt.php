@@ -13,10 +13,10 @@ class WXBizDataCrypt
     private $sessionKey;
 
     /**
-     * ¹¹Ôìº¯Êı
+     * æ„é€ å‡½æ•°
      *
-     * @param $sessionKey ÓÃ»§ÔÚĞ¡³ÌĞòµÇÂ¼ºó»ñÈ¡µÄ»á»°ÃÜÔ¿            
-     * @param $appid Ğ¡³ÌĞòµÄappid            
+     * @param $sessionKey ç”¨æˆ·åœ¨å°ç¨‹åºç™»å½•åè·å–çš„ä¼šè¯å¯†é’¥            
+     * @param $appid å°ç¨‹åºçš„appid            
      */
     function __construct($appid, $sessionKey)
     {
@@ -25,22 +25,22 @@ class WXBizDataCrypt
     }
 
     /**
-     * ¼ìÑéÊı¾İµÄÕæÊµĞÔ£¬²¢ÇÒ»ñÈ¡½âÃÜºóµÄÃ÷ÎÄ.
+     * æ£€éªŒæ•°æ®çš„çœŸå®æ€§ï¼Œå¹¶ä¸”è·å–è§£å¯†åçš„æ˜æ–‡.
      *
-     * @param $encryptedData ¼ÓÃÜµÄÓÃ»§Êı¾İ            
-     * @param $iv ÓëÓÃ»§Êı¾İÒ»Í¬·µ»ØµÄ³õÊ¼ÏòÁ¿            
-     * @param $data ½âÃÜºóµÄÔ­ÎÄ            
+     * @param $encryptedData åŠ å¯†çš„ç”¨æˆ·æ•°æ®            
+     * @param $iv ä¸ç”¨æˆ·æ•°æ®ä¸€åŒè¿”å›çš„åˆå§‹å‘é‡            
+     * @param $data è§£å¯†åçš„åŸæ–‡            
      *
-     * @return int ³É¹¦0£¬Ê§°Ü·µ»Ø¶ÔÓ¦µÄ´íÎóÂë
+     * @return int æˆåŠŸ0ï¼Œå¤±è´¥è¿”å›å¯¹åº”çš„é”™è¯¯ç 
      */
     public function decryptData($encryptedData, $iv)
     {
         if (strlen($this->sessionKey) != 24) {
-            throw new IllegalAesKeException("²»ºÏ·¨µÄAesKey");
+            throw new IllegalAesKeException("ä¸åˆæ³•çš„AesKey");
         }
         $aesKey = base64_decode($this->sessionKey);
         if (strlen($iv) != 24) {
-            throw new IllegalIvException("²»ºÏ·¨µÄIv");
+            throw new IllegalIvException("ä¸åˆæ³•çš„Iv");
         }
         
         $aesIV = base64_decode($iv);
@@ -51,11 +51,11 @@ class WXBizDataCrypt
         
         $data = json_decode($result, true);
         if ($data == NULL) {
-            throw new IllegalBufferException("²»ºÏ·¨µÄBuffer");
+            throw new IllegalBufferException("ä¸åˆæ³•çš„Buffer");
         }
         
         if (array_get($data, 'watermark.appid') != $this->appid) {
-            throw new IllegalBufferException("²»ºÏ·¨µÄBuffer");
+            throw new IllegalBufferException("ä¸åˆæ³•çš„Buffer");
         }
         
         return $data;
