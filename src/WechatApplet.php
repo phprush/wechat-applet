@@ -3,6 +3,7 @@ namespace PhpRush\Wechat\Applet;
 
 use Requests;
 use Exception;
+use PhpRush\Wechat\Applet\Exceptions\SessionExpiredException;
 
 class WechatApplet
 {
@@ -35,12 +36,8 @@ class WechatApplet
     public function getUserInfo($encryptedData, $iv)
     {
         $pc = new WXBizDataCrypt($this->appId, $this->sessionKey);
-        $decodeData = "";
-        $errCode = $pc->decryptData($encryptedData, $iv, $decodeData);
-        if ($errCode != 0) {
-            throw new Exception('weixin_decode_fail');
-        }
-        return $decodeData;
+        
+        return $pc->decryptData($encryptedData, $iv);
     }
 
     private function authCodeAndCode2session($code)
@@ -51,7 +48,7 @@ class WechatApplet
         
         $this->authInfo = json_decode($response->body, true);
         if (! isset($this->authInfo['openid'])) {
-            throw new Exception('weixin_session_expired');
+            throw new SessionExpiredException('会话过期或失效');
         }
         
         $this->openId = isset($this->authInfo['openid']) ? $this->authInfo['openid'] : "";

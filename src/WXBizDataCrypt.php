@@ -1,6 +1,10 @@
 <?php
 namespace PhpRush\Wechat\Applet;
 
+use PhpRush\Wechat\Applet\Exceptions\IllegalIvException;
+use PhpRush\Wechat\Applet\Exceptions\IllegalAesKeException ;
+use PhpRush\Wechat\Applet\Exceptions\IllegalBufferException;
+
 class WXBizDataCrypt
 {
 
@@ -29,30 +33,31 @@ class WXBizDataCrypt
      *
      * @return int 成功0，失败返回对应的错误码
      */
-    public function decryptData($encryptedData, $iv, &$data)
+    public function decryptData($encryptedData, $iv)
     {
         if (strlen($this->sessionKey) != 24) {
-            return ErrorCode::$IllegalAesKey;
+            throw new IllegalAesKeException("不合法的AesKey");
         }
         $aesKey = base64_decode($this->sessionKey);
         if (strlen($iv) != 24) {
-            return ErrorCode::$IllegalIv;
+            throw new IllegalIvException("不合法的Iv");
         }
+        
         $aesIV = base64_decode($iv);
         $aesCipher = base64_decode($encryptedData);
         $pc = new Prpcrypt($aesKey);
+        
         $result = $pc->decrypt($aesCipher, $aesIV);
-        if ($result[0] != 0) {
-            return $result[0];
+        
+        $data = json_decode($result, true);
+        if ($data == NULL) {
+            throw new IllegalBufferException("不合法的Buffer");
         }
-        $dataObj = json_decode($result[1]);
-        if ($dataObj == NULL) {
-            return ErrorCode::$IllegalBuffer;
+        
+        if (array_get($data, 'watermark.appid') != $this->appid) {
+            throw new IllegalBufferException("不合法的Buffer");
         }
-        if ($dataObj->watermark->appid != $this->appid) {
-            return ErrorCode::$IllegalBuffer;
-        }
-        $data = $result[1];
-        return ErrorCode::$OK;
+        
+        return $data;
     }
 }

@@ -2,13 +2,14 @@
 namespace PhpRush\Wechat\Applet;
 
 use Exception;
+use PhpRush\Wechat\Applet\Exceptions\IllegalBufferException;
 
 class Prpcrypt
 {
 
-    public $key;
+    protected $key;
 
-    function __construct($k)
+    public function __construct($k)
     {
         $this->key = $k;
     }
@@ -30,24 +31,17 @@ class Prpcrypt
             mcrypt_generic_deinit($module);
             mcrypt_module_close($module);
         } catch (Exception $e) {
-            return array(
-                ErrorCode::$IllegalBuffer,
-                null
-            );
+            throw new IllegalBufferException("不合法的Buffer");
         }
+        
+        $result = '';
         try {
-            // 去除补位字符
             $pkc_encoder = new PKCS7Encoder();
             $result = $pkc_encoder->decode($decrypted);
         } catch (Exception $e) {
-            return array(
-                ErrorCode::$IllegalBuffer,
-                null
-            );
+            throw new IllegalBufferException("不合法的Buffer");
         }
-        return array(
-            0,
-            $result
-        );
+        
+        return $result;
     }
 }
