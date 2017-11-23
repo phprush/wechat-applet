@@ -7,7 +7,7 @@ class WechatApplet extends Facade
 {
 
     /**
-     * »ñÈ¡×é¼þµÄ×¢²áÃû³Æ¡£
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½Æ¡ï¿½
      *
      * @return string
      */

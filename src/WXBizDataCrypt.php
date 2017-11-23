@@ -2,7 +2,7 @@
 namespace PhpRush\Wechat\Applet;
 
 use PhpRush\Wechat\Applet\Exceptions\IllegalIvException;
-use PhpRush\Wechat\Applet\Exceptions\IllegalAesKeException ;
+use PhpRush\Wechat\Applet\Exceptions\IllegalAesKeException;
 use PhpRush\Wechat\Applet\Exceptions\IllegalBufferException;
 
 class WXBizDataCrypt
@@ -44,10 +44,10 @@ class WXBizDataCrypt
         }
         
         $aesIV = base64_decode($iv);
-        $aesCipher = base64_decode($encryptedData);
+        
         $pc = new Prpcrypt($aesKey);
         
-        $result = $pc->decrypt($aesCipher, $aesIV);
+        $result = $pc->decrypt($encryptedData, $aesIV);
         
         $data = json_decode($result, true);
         if ($data == NULL) {
