@@ -48,7 +48,7 @@ class WechatApplet
         
         $this->authInfo = json_decode($response->body, true);
         if (! isset($this->authInfo['openid'])) {
-            throw new SessionExpiredException('会话过期');
+            throw new SessionExpiredException('会话过期'. json_encode($this->authInfo));
         }
         
         $this->openId = isset($this->authInfo['openid']) ? $this->authInfo['openid'] : "";
